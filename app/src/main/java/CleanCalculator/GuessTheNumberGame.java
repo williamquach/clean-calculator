@@ -4,6 +4,19 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Scanner;
 
+interface CommandLineReader {
+    String[] read();
+}
+
+class JavaUtilCommandLineReader implements CommandLineReader {
+    public String[] read() {
+        var scanner = new Scanner(System.in);
+        var line = scanner.nextLine();
+        scanner.close();
+        return line.split(" ");
+    }
+}
+
 interface FileReader {
     String read(String filename);
 }
@@ -87,10 +100,11 @@ interface CalculatorLogger {
 }
 
 interface CleanCalculator {
-    void makeArithmeticOperationOnFile(String filename, String operation);
+    void makeArithmeticOperationOnFile();
 }
 
 class MyCleanCalculator implements CleanCalculator {
+    private final CommandLineReader commandLineReader;
     private final FileReader fileReader;
     private final FileParser<int[]> fileParser;
     private final Calculator calculator;
@@ -98,12 +112,14 @@ class MyCleanCalculator implements CleanCalculator {
     private final CalculatorLogger calculatorLogger;
 
     public MyCleanCalculator(
+            CommandLineReader commandLineReader,
             FileReader fileReader,
             FileParser<int[]> fileParser,
             Calculator calculator,
             Printer printer,
             CalculatorLogger calculatorLogger
             ) {
+        this.commandLineReader = commandLineReader;
         this.fileReader = fileReader;
         this.fileParser = fileParser;
         this.calculator = calculator;
@@ -111,8 +127,12 @@ class MyCleanCalculator implements CleanCalculator {
         this.calculatorLogger = calculatorLogger;
     }
 
-    public void makeArithmeticOperationOnFile(String filename, String operation) {
+    public void makeArithmeticOperationOnFile() {
         calculatorLogger.start();
+
+        // Read command and arguments an fill the variables (TODO)
+        String filename = "";
+        String operation = "";
 
         var fileContent = fileReader.read(filename);
         var numbers = fileParser.parse(fileContent, "\n");

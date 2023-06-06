@@ -5,6 +5,7 @@ package CleanCalculator;
 
 public class App {
   public static void main(String[] args) {
+    CommandLineReader commandLineReader = new JavaUtilCommandLineReader();
     FileReader fileReader = new JavaUtilFileReader();
     FileParser<int[]> fileParser = new IntegerFileParser();
     Calculator calculator = new BasicCalculator();
@@ -12,6 +13,7 @@ public class App {
     CalculatorLogger calculatorLogger = null;
 
     CleanCalculator cleanCalculator = new MyCleanCalculator(
+        commandLineReader,
         fileReader,
         fileParser,
         calculator,
